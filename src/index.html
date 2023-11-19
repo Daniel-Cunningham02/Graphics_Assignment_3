@@ -14,12 +14,12 @@ uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
 uniform vec4 lightPosition;
 uniform float shininess;
-uniform mat3 normalMatrix;
+uniform mat3 normalMatrix;  
 
 void
 main()
 {
-
+    
     // pos is vertex position in eye coordinates
 
     vec3 pos = (modelViewMatrix * vPosition).xyz;
@@ -32,6 +32,7 @@ main()
 
     if(lightPosition.w == 0.0) L = normalize(lightPosition.xyz);
     else L = normalize( lightPosition.xyz - pos );
+    
 
     // Because the eye point the is at the orgin
     // the vector from the vertex position to the eye is
@@ -62,7 +63,7 @@ main()
 
     gl_Position = projectionMatrix * modelViewMatrix * vPosition;
 
-    fColor = ambient + diffuse +specular;
+    fColor = ambient + diffuse + specular;
 
     fColor.a = 1.0;
 }
@@ -81,7 +82,7 @@ main()
 
 }
 </script>
-<script id="vertex-shader2" type="x-shader/x-vertex">
+<script id="vertex-shader2" type="x-shader/x-vertex">    
     attribute vec4 vPosition;
     attribute vec4 vNormal;
     varying vec3 N, L, E;
@@ -89,24 +90,21 @@ main()
     uniform mat4 projectionMatrix;
     uniform vec4 lightPosition;
     uniform mat3 normalMatrix;
-    
+
     void main()
     {
+        vec3 light;
         vec3 pos = (modelViewMatrix * vPosition).xyz;
-    
-        // check for directional light
-    
-        if(lightPosition.w == 0.0) L = normalize(lightPosition.xyz);
-        else L = normalize( lightPosition.xyz - pos );
-    
+        if(lightPosition.z == 0.0)  L = normalize(lightPosition.xyz);
+        else  L = normalize(lightPosition).xyz - pos;
+
         E =  -normalize(pos);
         N = normalize( normalMatrix*vNormal.xyz);
-    
         gl_Position = projectionMatrix * modelViewMatrix * vPosition;
-    
+
     }
     </script>
-<script id="fragment-shader2" type="x-shader/x-fragment">
+<script id="fragment-shader2" type="x-shader/x-fragment">    
     precision mediump float;
 
     uniform vec4 ambientProduct;
@@ -141,6 +139,9 @@ main()
 <script type="text/javascript" src="../Common/initShaders.js"></script>
 <script type="text/javascript" src="../Common/MVnew.js"></script>
 <script type="text/javascript" src="index.js"></script>
+<script type="text/javascript" src="sphere.js"></script>
+<script type="text/javascript" src="cube.js"></script>
+<script type="text/javascript" src="variables.js"></script>
 <style>
 body {
     margin: 0;
@@ -151,6 +152,5 @@ body {
 <canvas id="gl-canvas" width="700" height="600">
 Oops ... your browser doesn't support the HTML5 canvas element
 </canvas>
-<button onclick="switchShaders()">Switch Shaders</button>
 </body>
 </html>
