@@ -24,9 +24,9 @@ window.onload = function init() {
     var specularProduct = mult(lightSpecular, materialSpecular);
     
     //create spheres
+    tetrahedron(va, vb, vc, vd, subdivisions, points2, normals2, translations2, rotations2, vec3(0.5, 0, 0.5));
     tetrahedron(va, vb, vc, vd, subdivisions, points1, normals1, translations1, rotations1, vec3(-0.5, 0, 0.5));
-    tetrahedron(va, vb, vc, vd, subdivisions, points1, normals1, translations1, rotations1, vec3(0.5, 0, 0.5));
-    
+    cube(points1, normals1, translations1, rotations1, vec3(0, 0, 0.5))
 
     //end of creating spheres
 
@@ -63,11 +63,17 @@ window.onload = function init() {
        "shininess"),materialShininess );
 
 
-    canvas.addEventListener('mousedown', (e) => {
-        rebindBuffers();
+    canvas.addEventListener('click', (e) => {
         var x = -1 + ((2 * e.clientX)/canvas.width);
         var y = -1 + ((2 * (canvas.height - e.clientY))/canvas.height)
-        tetrahedron(va, vb, vc, vd, subdivisions, points1, normals1, translations1, rotations1, vec3(x, y, 0))
+        
+        if (createSphere) {
+            tetrahedron(va, vb, vc, vd, subdivisions, points1, normals1, translations1, rotations1, vec3(x, y, 0.5))
+        }
+        else {
+            cube(points1, normals1, translations1, rotations1, vec3(x, y, 0))
+        }
+        rebindBuffers();
     }, undefined, (error) => {
         console.error(error);
     });
@@ -82,13 +88,15 @@ function render() {
     setTimeout(() => {
         gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         theta += 4
+
+        rebindBuffers();
         for( var i=0; i<points1.length; i+=3) { 
             /*translationMatrix = translate(translations1[i], translations1[i+1], translations1[i+2])
             rotationMatrix = rotate(theta, rotations1[i])*/
         modelViewMatrix = lookAt(eye, at , up);
         modelViewMatrix = mult(modelViewMatrix, translate(translations1[i], translations1[i+1], translations1[i+2]))
         modelViewMatrix = mult(modelViewMatrix, rotate(theta, rotations1[i]))
-
+        modelViewMatrix = mult(modelViewMatrix, scale(0.1, 0.1, 0.1))
         normalMatrix = mat3(
             modelViewMatrix[0], modelViewMatrix[1], modelViewMatrix[2],
             modelViewMatrix[4], modelViewMatrix[5], modelViewMatrix[6],
@@ -127,4 +135,30 @@ function rebindBuffers() {
     vPosition = gl.getAttribLocation( program, "vPosition");
     gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vPosition);
+}
+
+
+function drawSecondBuffer() {
+        //bindProgram2();
+        modelViewMatrix = lookAt(eye, at , up);
+        modelViewMatrix = mult(modelViewMatrix, translate(translations2[i], translations2[i+1], translations2[i+2]))
+        modelViewMatrix = mult(modelViewMatrix, rotate(theta, rotations2[i]))
+
+        normalMatrix = mat3(
+            modelViewMatrix[0], modelViewMatrix[1], modelViewMatrix[2],
+            modelViewMatrix[4], modelViewMatrix[5], modelViewMatrix[6],
+            modelViewMatrix[8], modelViewMatrix[9], modelViewMatrix[10]
+        );
+
+            // normal matrix only really need if there is nonuniform scaling
+            // it's here for generality but since there is
+            // no scaling in this example we could just use modelView matrix in shaders
+
+        gl.uniformMatrix4fv(modelViewMatrixLoc, false, modelViewMatrix );
+        gl.uniformMatrix3fv(normalMatrixLoc, false, normalMatrix);
+        gl.drawArrays(gl.TRIANGLES, 0, points2.length);
+}
+
+function changeShape() {
+    createSphere = !createSphere
 }

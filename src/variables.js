@@ -14,6 +14,7 @@ var at = new vec3(0.0, 0.0, 0.0);
 var up = vec3(0.0, 1.0, 0.0);
 var program, program2;
 var subdivisions = 4;
+var createSphere = true;    
 
 // arrays for the first shader
 var points1 = [];
@@ -31,10 +32,22 @@ var theta = 0.01
 var phi = 0
 
 // Constants for building the sphere
-const va = vec4(0.0, 0.0, -1.0, 10);
-const vb = vec4(0.0, 0.942809, 0.333333, 10);
-const vc = vec4(-0.816497, -0.471405, 0.333333, 10);
-const vd = vec4(0.816497, -0.471405, 0.333333, 10);
+const va = vec4(0.0, 0.0, -1.0, 1);
+const vb = vec4(0.0, 0.942809, 0.333333, 1);
+const vc = vec4(-0.816497, -0.471405, 0.333333, 1);
+const vd = vec4(0.816497, -0.471405, 0.333333, 1   );
+
+// Constants for building the cube
+const vertices = [
+    vec4( -0.5, -0.5,  0.5, 1 ),
+    vec4( -0.5,  0.5,  0.5, 1 ),
+    vec4( 0.5,  0.5,  0.5, 1 ),
+    vec4( 0.5, -0.5,  0.5, 1 ),
+    vec4( -0.5, -0.5, -0.5, 1 ),
+    vec4( -0.5,  0.5, -0.5, 1 ),
+    vec4( 0.5,  0.5, -0.5, 1 ),
+    vec4( 0.5, -0.5, -0.5, 1 )
+];
 
 // Camera options
 
