@@ -26,16 +26,16 @@ window.onload = function init() {
     //
     //  Load shaders and initialize attribute buffers
     //
-    program = initShaders( gl, "vertex-shader", "fragment-shader" );
-    program2 = initShaders(gl, "vertex-shader2", "fragment-shader2");
+    program = initShaders( gl, "vertex-shader-v", "vertex-shader-f" );
+    program2 = initShaders(gl, "fragment-shader-v", "fragment-shader-f");
     gl.useProgram( program );
 
     var ambientProduct = mult(lightAmbient, materialAmbient);
     var diffuseProduct = mult(lightDiffuse, materialDiffuse);
     var specularProduct = mult(lightSpecular, materialSpecular);
     
-    var s = new Sphere(vec3(0.5, 0, 0))
-    var s2 = new Sphere(vec3(-0.5, 0, 0));
+    var s = new Sphere(vec3(-0.5, 0, 0))
+    var s2 = new Sphere(vec3(0.5, 0, 0));
     console.log(s);
     objects1.push(s);
     objects2.push(s2);
@@ -269,5 +269,12 @@ function bindProgram2() {
 }
 
 function changeShape() {
-    createSphere = !createSphere
+    if(createSphere) {
+        document.getElementById("text").innerText = "Creating Cubes";
+        createSphere = false;
+    }
+    else {
+        document.getElementById("text").innerText = "Creating Spheres";
+        createSphere = true;
+    }
 }

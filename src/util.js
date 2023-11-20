@@ -44,3 +44,39 @@ function generateRotationVec() {
     }
     return rotation;
 }
+
+function moveLeft() {
+    if(lightPosition[0] - 0.1  >= -1.0) {
+        lightPosition[0] -= 0.2;
+        gl.uniform4fv(gl.getUniformLocation(program,
+        "lightPosition"), lightPosition );
+        console.log(lightPosition)
+    }
+}
+
+function moveRight() {
+    if(lightPosition[0] + 0.1 <= 1.0) {
+        lightPosition[0] += 0.2;
+        gl.uniform4fv(gl.getUniformLocation(program,
+        "lightPosition"), lightPosition );
+        console.log(lightPosition)
+    }
+}
+
+function moveUp() {
+    if(lightPosition[1] + 0.1 <= 1.0 ) {
+        lightPosition[1] += 0.2;
+        gl.uniform4fv(gl.getUniformLocation(program,
+        "lightPosition"), lightPosition );
+        console.log(lightPosition)
+    }
+}
+
+function moveDown() {
+    if(lightPosition[1] - 0.1 >= -1.0) {
+        lightPosition[1] -= 0.1;
+        gl.uniform4fv(gl.getUniformLocation(program,
+        "lightPosition"), lightPosition );
+        console.log(lightPosition)
+    }
+}

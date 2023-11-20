@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 
-<script id="vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-v" type="x-shader/x-vertex">
 
 // assume both position and normal are in homogeneous form
 
@@ -69,7 +69,7 @@ main()
     fColor.a = 1.0;
 }
 </script>
-<script id="fragment-shader" type="x-shader/x-fragment">
+<script id="vertex-shader-f" type="x-shader/x-fragment">
 
 precision mediump float;
 
@@ -83,7 +83,7 @@ main()
 
 }
 </script>
-<script id="vertex-shader2" type="x-shader/x-vertex">    
+<script id="fragment-shader-v" type="x-shader/x-vertex">    
     attribute vec4 vPosition;
     attribute vec4 vNormal;
     varying vec3 N, L, E;
@@ -104,7 +104,7 @@ main()
 
     }
     </script>
-<script id="fragment-shader2" type="x-shader/x-fragment">    
+<script id="fragment-shader-f" type="x-shader/x-fragment">    
     precision mediump float;
 
     uniform vec4 ambientProduct;
@@ -154,7 +154,12 @@ canvas {
 }
 .buttons {
     z-index: 2;
-    position: absolute
+    position: absolute;
+    display: flexbox;
+}
+p {
+ position: absolute;
+ top: 0.5em;
 }
 </style>
 
@@ -164,6 +169,11 @@ Oops ... your browser doesn't support the HTML5 canvas element
 </canvas>
 <div class="buttons">
     <button onclick="changeShape()">Change Shape</button>
+    <button onclick="moveLeft()">Move Light Left</button>
+    <button onclick="moveRight()">Move Light Right</button>
+    <button onclick="moveDown()">Move Light Down</button>
+    <button onclick="moveUp()">Move Light Up</button>
 </div>
+<p id="text">Creating Circles</p>
 </body>
 </html>
